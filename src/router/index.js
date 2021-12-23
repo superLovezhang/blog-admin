@@ -56,64 +56,64 @@ export const constantRoutes = [
   },
 
   {
-    path: '/',
+    path: '/users',
     component: Layout,
     children: [
       {
-        path: 'users',
+        path: '',
         name: '用户',
-        component: () => import('@/views/table/index'),
-        meta: { title: '用户管理', icon: 'table' }
+        component: () => import('@/views/user'),
+        meta: { title: '用户管理', icon: 'el-icon-user' }
       }
     ]
   },
 
   {
-    path: '/',
+    path: '/articles',
     component: Layout,
     children: [
       {
-        path: 'articles',
-        component: () => import('@/views/table/index'),
-        meta: { title: '文章管理', icon: 'table' }
+        path: '',
+        component: () => import('@/views/article'),
+        meta: { title: '文章管理', icon: 'el-icon-document' }
       }
     ]
   },
   {
-    path: '/',
+    path: '/comments',
     component: Layout,
     children: [
       {
-        path: 'comments',
+        path: '',
         name: '评论',
         component: () => import('@/views/table/index'),
-        meta: { title: '评论管理', icon: 'table' }
+        meta: { title: '评论管理', icon: 'el-icon-edit' }
       }
     ]
   },
 
   {
-    path: '/',
+    path: '/categories',
     component: Layout,
     children: [
       {
-        path: 'categories',
+        path: '',
         name: '分类',
         component: () => import('@/views/table/index'),
-        meta: { title: '分类管理', icon: 'table' }
+        meta: { title: '分类管理', icon: 'el-icon-folder' }
       }
     ]
   },
 
   {
-    path: '/',
+    path: '/labels',
     component: Layout,
     children: [
       {
-        path: 'labels',
+        path: '',
         name: '标签',
         component: () => import('@/views/table/index'),
-        meta: { title: '标签管理', icon: 'table' }
+        meta: { title: '标签管理', icon: 'el-icon-paperclip' }
       }
     ]
   },
