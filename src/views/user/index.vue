@@ -1,35 +1,6 @@
 <template>
   <div class="user_container">
-    <div class="user_search-box">
-      <el-select v-model="value" placeholder="请选择性别" class="search_select">
-        <el-option
-          label="男"
-          value="0">
-        </el-option>
-        <el-option
-          label="女"
-          value="1">
-        </el-option>
-      </el-select>
-      <el-select v-model="value" placeholder="请选择状态" class="search_select">
-        <el-option
-          label="冻结"
-          value="0">
-        </el-option>
-        <el-option
-          label="正常"
-          value="1">
-        </el-option>
-      </el-select>
-      <el-input
-        placeholder="请输入搜索内容"
-        v-model="searchValue"
-        class="search_input"
-        clearable
-      >
-        <el-button slot="append" icon="el-icon-search"></el-button>
-      </el-input>
-    </div>
+    <SearchBar :searchItems="searchItems"/>
     <el-table
       :data="userList"
       border
@@ -115,7 +86,12 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar'
+
 export default {
+  components: {
+    SearchBar
+  },
   data() {
     return {
       searchValue: '',
@@ -132,6 +108,43 @@ export default {
           gender: -1,
           updateTime: '2021-09-27 14:11:19',
           userId: '1442371251732303874'
+        }
+      ],
+      searchItems: [
+        {
+          type: 'select',
+          paramName: 'gender',
+          placeholder: '请选择性别',
+          children: [
+            {
+              label: '男',
+              value: 0
+            },
+            {
+              label: '女',
+              value: 1
+            }
+          ]
+        },
+        {
+          type: 'select',
+          paramName: 'status',
+          placeholder: '请选择状态',
+          children: [
+            {
+              label: '冻结',
+              value: 'FROZEN'
+            },
+            {
+              label: '正常',
+              value: 'NORMAL'
+            }
+          ]
+        },
+        {
+          type: 'input',
+          paramName: 'searchValue',
+          placeholder: '请输入搜索内容'
         }
       ]
     }
@@ -152,12 +165,5 @@ export default {
 <style scoped lang="scss">
 .user_container {
   padding: 30px;
-}
-.search_select {
-  margin-right: 20px;
-}
-.search_input {
-  width: 500px;
-  margin-bottom: 25px;
 }
 </style>
