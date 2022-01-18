@@ -10,6 +10,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
+    config.headers['platform'] = 'ADMIN'
     if (store.getters.token) {
       config.headers['Authorization'] = getToken()
     }

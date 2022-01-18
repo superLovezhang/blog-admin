@@ -1,13 +1,13 @@
 const TokenKey = 'blog_admin_token_key'
 
 export function getToken() {
-  return window.localStorage.get(TokenKey)
+  return window.localStorage.getItem(TokenKey)
 }
 
 export function setToken(token) {
-  return window.localStorage.set(TokenKey, token)
+  return window.localStorage.setItem(TokenKey, token)
 }
 
 export function removeToken() {
-  return window.localStorage.remove(TokenKey)
+  return window.localStorage.removeItem(TokenKey)
 }
