@@ -1,5 +1,5 @@
-import { list } from '@/api/user'
-import { login, logout, info } from '@/api/admin'
+import { list, ban } from '@/api/user'
+import { login, info } from '@/api/admin'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -9,7 +9,8 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     userList: [],
-    nextPagination: false
+    nextPagination: false,
+    userListParams: {}
   }
 }
 
@@ -33,6 +34,9 @@ const mutations = {
   },
   SET_PAGINATION: (state, pagination) => {
     state.nextPagination = pagination
+  },
+  SET_USER_LIST_PARAMS: (state, params) => {
+    state.userListParams = params
   }
 }
 
@@ -70,9 +74,9 @@ const actions = {
       })
     })
   },
-  getUserList({ commit }, params) {
+  getUserList({ commit, state }) {
     return new Promise((resolve, reject) => {
-      list(params).then(response => {
+      list(state.userListParams).then(response => {
         const { data } = response
         const { records, next } = data
         commit('SET_USER_LIST', records ?? [])
@@ -83,18 +87,18 @@ const actions = {
       })
     })
   },
+  updateUserListParams({ commit, dispatch }, params) {
+    commit('SET_USER_LIST_PARAMS', params)
+    dispatch('getUserList')
+  },
 
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      removeToken() // must remove  token  first
+      resetRouter()
+      commit('RESET_STATE')
+      resolve()
     })
   },
 
@@ -104,6 +108,13 @@ const actions = {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
+    })
+  },
+  banUser({ dispatch }, params) {
+    return new Promise((resolve, reject) => {
+      ban(params).then(res => {
+        dispatch('getUserList')
+      }).catch(err => reject(err))
     })
   }
 }

@@ -7,3 +7,11 @@ export function list(params) {
     params
   })
 }
+
+export function ban(params) {
+  return request({
+    url: 'user/ban',
+    method: 'post',
+    params
+  })
+}

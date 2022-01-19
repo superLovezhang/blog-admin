@@ -14,9 +14,3 @@ export function info() {
     method: 'get'
   })
 }
-export function logout() {
-  return request({
-    url: '/administrator/logout',
-    method: 'post'
-  })
-}

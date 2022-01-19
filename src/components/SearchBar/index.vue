@@ -7,7 +7,7 @@
       v-model="params[item.paramName]"
       :placeholder="item.placeholder"
       class="search_select"
-      @change="callQueryMethod"
+      @change="updateParentParams"
     >
       <el-option
         v-for="subItem in item.children"
@@ -22,16 +22,15 @@
       v-model="params[item.paramName]"
       :placeholder="item.placeholder"
       class="search_input"
-      clearable
-      @keyup.enter.native="callQueryMethod"
+      @keyup.enter.native="updateParentParams"
     >
       <el-button
         slot="append"
         icon="el-icon-search"
-        @click="callQueryMethod"
+        @click="updateParentParams"
       />
     </el-input>
-    <el-button type="primary" @click="reset">重置</el-button>
+    <el-button :disabled="resetConditions" type="primary" @click="reset">重置</el-button>
   </div>
 </template>
 
@@ -50,14 +49,12 @@ export default {
     }
   },
   methods: {
-    callQueryMethod() {
-      // 触发父组件传来的函数
-      this.$emit('queryMethod', this.params)
-      console.log(this.params)
+    updateParentParams() {
+      this.$store.dispatch('user/updateUserListParams', this.params)
     },
     reset() {
       this.params = {}
-      this.callQueryMethod()
+      this.updateParentParams()
     }
   },
   computed: {
@@ -66,6 +63,9 @@ export default {
     },
     inputItems() {
       return this.$props.searchItems.filter(item => item.type === 'input')
+    },
+    resetConditions() {
+      return Object.keys(this.params).length === 0
     }
   }
 }

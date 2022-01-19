@@ -1,9 +1,6 @@
 <template>
   <div class="user_container">
-    <SearchBar
-      :searchItems="searchItems"
-      @queryMethod="(params) => $store.dispatch('user/getUserList', params)"
-    />
+    <SearchBar :searchItems="searchItems"/>
     <el-table
       :data="$store.getters.userList"
       border
@@ -53,10 +50,10 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="email"
+        prop="frozenReason"
         label="冻结原因"
         align="center"
-      >-</el-table-column>
+      />
       <el-table-column
         prop="createTime"
         label="注册日期"
@@ -78,13 +75,29 @@
           <el-button
             size="mini"
             :type="hasFrozen(scope.row.status) ? 'success' : 'danger'"
-            @click="frozenUser(scope.row)"
+            @click="hasFrozen(scope.row.status) ? thawUser(scope.row): openDialog(scope.row)"
           >
             {{ hasFrozen(scope.row.status) ? '解冻' : '冻结' }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      title="冻结"
+      :visible.sync="frozenUserDialog"
+      width="30%"
+      :before-close="closeDialog"
+    >
+      <el-input
+        v-model="frozenReason"
+        placeholder="请输入冻结理由"
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="frozenUser">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -97,7 +110,10 @@ export default {
   },
   data() {
     return {
-      searchValue: '',
+      currentUser: {},
+      frozenUserDialog: false,
+      frozenReason: '',
+      queryParams: {},
       searchItems: [
         {
           type: 'select',
@@ -144,9 +160,27 @@ export default {
     hasFrozen(status) {
       return status === 'FROZEN'
     },
-    frozenUser(user) {
-      this.userList[0].status = this.hasFrozen(user.status) ? 'NORMAL' : 'FROZEN'
-      console.log(user)
+    openDialog(user) {
+      this.currentUser = user
+      this.frozenUserDialog = true
+    },
+    closeDialog() {
+      this.frozenUserDialog = false
+      this.frozenReason = ''
+    },
+    frozenUser() {
+      if (!this.frozenReason) {
+        return this.$message.error('冻结理由不能为空')
+      }
+      this.$store.dispatch('user/banUser', {
+        userId: this.currentUser.userId,
+        status: 'FROZEN',
+        frozenReason: this.frozenReason
+      })
+      this.closeDialog()
+    },
+    thawUser(user) {
+      this.$store.dispatch('user/banUser', { userId: user.userId, frozenReason: '' })
       this.$message.success('操作成功')
     }
   }
