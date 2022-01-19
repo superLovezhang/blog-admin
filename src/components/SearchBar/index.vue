@@ -31,6 +31,7 @@
         @click="callQueryMethod"
       />
     </el-input>
+    <el-button type="primary" @click="reset">重置</el-button>
   </div>
 </template>
 
@@ -51,8 +52,12 @@ export default {
   methods: {
     callQueryMethod() {
       // 触发父组件传来的函数
-      // this.$emit('xxx', this.params)
+      this.$emit('queryMethod', this.params)
       console.log(this.params)
+    },
+    reset() {
+      this.params = {}
+      this.callQueryMethod()
     }
   },
   computed: {
