@@ -5,7 +5,7 @@ import { getToken, removeToken } from '@/utils/auth'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  timeout: 5000 // request timeout
+  timeout: 15000 // request timeout
 })
 
 service.interceptors.request.use(
@@ -26,7 +26,7 @@ service.interceptors.response.use(
   response => {
     const data = response.data
     if (data.code !== 1000 && data.code !== 200) {
-      if (data.code === 2002 || data.code === 2001) {
+      if (data.code === 2002) {
         removeToken()
         MessageBox.confirm('您已经登出，请重新登录', '确认登出', {
           confirmButtonText: '重新登陆',
@@ -37,14 +37,15 @@ service.interceptors.response.use(
             location.reload()
           })
         })
+      } else {
+        Message({
+          message: data.message || 'Error',
+          type: 'error',
+          duration: 5 * 1000
+        })
       }
       return Promise.reject(new Error(data.message || 'Error'))
     }
-    Message({
-      message: data.message || 'Error',
-      type: 'error',
-      duration: 5 * 1000
-    })
     return data
   },
   error => {
