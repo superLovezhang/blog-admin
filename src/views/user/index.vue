@@ -1,8 +1,11 @@
 <template>
   <div class="user_container">
-    <SearchBar :searchItems="searchItems"/>
+    <SearchBar
+      :searchItems="searchItems"
+      @queryMethod="(params) => $store.dispatch('user/getUserList', params)"
+    />
     <el-table
-      :data="userList"
+      :data="$store.getters.userList"
       border
       style="width: 100%">
       <el-table-column
@@ -95,21 +98,6 @@ export default {
   data() {
     return {
       searchValue: '',
-      userList: [
-        {
-          username: 'superLoveTian',
-          avatar: 'https://tyzzblog.oss-cn-beijing.aliyuncs.com/2021/10/21/1634823510837image.png',
-          birthday: null,
-          city: null,
-          status: 'FROZEN',
-          createTime: '2021-09-27 14:11:19',
-          description: '我是一个阳光开朗的大男孩子！！！！！！健康努力每一天！！！',
-          email: '2321885538@qq.com',
-          gender: -1,
-          updateTime: '2021-09-27 14:11:19',
-          userId: '1442371251732303874'
-        }
-      ],
       searchItems: [
         {
           type: 'select',
@@ -148,6 +136,9 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    this.$store.dispatch('user/getUserList')
   },
   methods: {
     hasFrozen(status) {
