@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     updateParentParams() {
-      this.$store.dispatch('user/updateUserListParams', this.params)
+      this.$emit('updateParams', this.params)
     },
     reset() {
       this.params = {}
@@ -77,6 +77,7 @@ export default {
 }
 .search_input {
   width: 500px;
+  margin-right: 20px;
   margin-bottom: 25px;
 }
 </style>

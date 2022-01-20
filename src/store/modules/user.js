@@ -9,7 +9,7 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     userList: [],
-    nextPagination: false,
+    pagination: { size: 10, page: 1 },
     userListParams: {}
   }
 }
@@ -32,11 +32,11 @@ const mutations = {
   SET_USER_LIST: (state, list) => {
     state.userList = list
   },
-  SET_PAGINATION: (state, pagination) => {
-    state.nextPagination = pagination
-  },
   SET_USER_LIST_PARAMS: (state, params) => {
     state.userListParams = params
+  },
+  SET_PAGINATION: (state, pagination) => {
+    state.pagination = pagination ?? state.pagination
   }
 }
 
@@ -76,19 +76,24 @@ const actions = {
   },
   getUserList({ commit, state }) {
     return new Promise((resolve, reject) => {
-      list(state.userListParams).then(response => {
-        const { data } = response
-        const { records, next } = data
-        commit('SET_USER_LIST', records ?? [])
-        commit('SET_PAGINATION', next ?? false)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+      list({ ...state.userListParams, ...state.pagination })
+        .then(response => {
+          const { data } = response
+          const { records, pages, size } = data
+          commit('SET_USER_LIST', records ?? [])
+          commit('SET_PAGINATION', { page: pages, size })
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
     })
   },
   updateUserListParams({ commit, dispatch }, params) {
     commit('SET_USER_LIST_PARAMS', params)
+    dispatch('getUserList')
+  },
+  updatePagination({ commit, dispatch, state }, pagination) {
+    commit('SET_PAGINATION', { ...state.pagination, ...pagination })
     dispatch('getUserList')
   },
 
