@@ -98,9 +98,9 @@
           placeholder="请输入冻结理由"
         />
         <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="frozenUser">确 定</el-button>
-      </span>
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="frozenUser">确 定</el-button>
+        </span>
       </el-dialog>
     </Table>
   </div>

@@ -48,15 +48,6 @@ export default {
       params: {}
     }
   },
-  methods: {
-    updateParentParams() {
-      this.$emit('updateParams', this.params)
-    },
-    reset() {
-      this.params = {}
-      this.updateParentParams()
-    }
-  },
   computed: {
     selectItems() {
       return this.$props.searchItems.filter(item => item.type === 'select')
@@ -66,6 +57,15 @@ export default {
     },
     resetConditions() {
       return Object.keys(this.params).length === 0
+    }
+  },
+  methods: {
+    updateParentParams() {
+      this.$emit('updateParams', this.params)
+    },
+    reset() {
+      this.params = {}
+      this.updateParentParams()
     }
   }
 }
