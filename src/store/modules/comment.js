@@ -1,9 +1,9 @@
-import { list, audit } from '@/api/article'
+import { list, remove } from '@/api/comment'
 
 const state = {
   queryParams: {},
   pagination: { size: 10, page: 1 },
-  articleList: []
+  commentList: []
 }
 
 const mutations = {
@@ -13,35 +13,35 @@ const mutations = {
   SET_PAGINATION: (state, pagination) => {
     state.pagination = { ...state.pagination, ...pagination }
   },
-  SET_ARTICLE_LIST: (state, articles) => {
-    state.articleList = articles
+  SET_COMMENT_LIST: (state, articles) => {
+    state.commentList = articles
   }
 }
 
 const actions = {
-  getArticleList({ commit, state }) {
+  getCommentList({ commit, state }) {
     return new Promise((resolve, reject) => {
       list({ ...state.queryParams, ...state.pagination }).then(res => {
         const { data } = res
         const { pages, size, records } = data ?? {}
-        commit('SET_ARTICLE_LIST', records)
+        commit('SET_COMMENT_LIST', records)
         commit('SET_PAGINATION', { pages, size })
       }).catch(err => reject(err))
     })
   },
   updateQueryParams({ commit, dispatch }, params) {
     commit('SET_PARAMS', params)
-    dispatch('getArticleList')
+    dispatch('getCommentList')
   },
   updatePagination({ commit, dispatch }, pagination) {
     commit('SET_PAGINATION', pagination)
-    dispatch('getArticleList')
+    dispatch('getCommentList')
   },
-  auditArticle({ dispatch }, payload) {
+  removeComment({ dispatch }, payload) {
     return new Promise((resolve, reject) => {
-      audit(payload)
+      remove(payload)
         .then((res) => {
-          dispatch('getArticleList')
+          dispatch('getCommentList')
           resolve(res.message)
         })
         .catch(err => reject(err))

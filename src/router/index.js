@@ -86,7 +86,7 @@ export const constantRoutes = [
       {
         path: '',
         name: '评论',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/comment/index'),
         meta: { title: '评论管理', icon: 'el-icon-edit' }
       }
     ]

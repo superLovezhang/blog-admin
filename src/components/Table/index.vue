@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     page() {
-      return this.pagination?.page ?? 1
+      return this.pagination?.pages ?? 1
     }
   },
   methods: {

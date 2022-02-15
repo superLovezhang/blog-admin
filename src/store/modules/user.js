@@ -81,7 +81,7 @@ const actions = {
           const { data } = response
           const { records, pages, size } = data
           commit('SET_USER_LIST', records ?? [])
-          commit('SET_PAGINATION', { page: pages, size })
+          commit('SET_PAGINATION', { pages, size })
           resolve(data)
         }).catch(error => {
           reject(error)
